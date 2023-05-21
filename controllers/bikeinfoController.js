@@ -7,17 +7,28 @@ const fs = require('fs');
 const FormData = require('form-data');
 const {upload}= require('../middleware/multerConfig');
 
+const getSortedBikeInfo = asyncHandler(async (req, res) => {
+  const { sort } = req.query;
+  let bikeInfo;
 
-// get all the bike info
-const getbikeinfo= asyncHandler( async(req,res)=>{
-    const bikeInfo= await BikeInfo.find();
-    res.status(200).json(bikeInfo);
-   
+  if (sort === 'highToLow') {
+    bikeInfo = await BikeInfo.find().sort({ rentPrice: -1 });
+  } else if (sort === 'lowToHigh') {
+    bikeInfo = await BikeInfo.find().sort({ rentPrice: 1 });
+  } else {
+    res.status(400).json({ error: 'Invalid sorting option' });
+    return;
+  }
+
+  res.status(200).json(bikeInfo);
 });
 
-//create a new bike info
-// post  method
-// 
+const getUnsortedBikeInfo = asyncHandler(async (req, res) => {
+  const bikeInfo = await BikeInfo.find();
+  res.status(200).json(bikeInfo);
+});   
+
+//With this new endpoint, you can now make requests to /api/bikeinfo/sort?sort=highToLow to retrieve bike information sorted from high to low, and /api/bikeinfo/sort/lowToHigh to retrieve bike information sorted from low to high.
 
 // Create a new bike info
 const createBikeInfo = asyncHandler(async (req, res) => {
@@ -158,7 +169,8 @@ const deleteBikeInfo= asyncHandler(async(req,res)=>{
             });
             module.exports={
                 createBikeInfo,
-                getbikeinfo,
+                getSortedBikeInfo,
+                getUnsortedBikeInfo,
                 getBikeInfoById,
                 updateBikeInfo,
                 deleteBikeInfo

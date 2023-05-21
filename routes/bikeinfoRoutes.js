@@ -1,30 +1,33 @@
-const express=require('express');
-const router=express.Router();
+const express = require('express');
+const router = express.Router();
 const multer = require('multer');
-const {upload }= require('../middleware/multerConfig');
+const { upload } = require('../middleware/multerConfig');
 
-const {  
-   
-    getbikeinfo,
-    createBikeInfo,
-    getBikeInfoById,
-    updateBikeInfo,
-    deleteBikeInfo
-
+const {
+  getSortedBikeInfo,
+  getUnsortedBikeInfo,
+  createBikeInfo,
+  getBikeInfoById,
+  updateBikeInfo,
+  deleteBikeInfo
 } = require('../controllers/bikeinfoController');
 
-// const upload = multer({ dest: 'uploads/' }); // Specify the destination directory for uploaded files
+// Retrieve all bike information without sorting
+router.get('/', getUnsortedBikeInfo);
 
-// api routes in the backend of any projects here 
-// router.route('/').get(getbikeinfo).post(createBikeInfo,upload.array('images', 2));
-router.route('/').get(getbikeinfo).post(upload.array('images', 2), createBikeInfo);
+// Retrieve bike information with sorting
+router.get('/sort', getSortedBikeInfo);
 
+// Create a new bike info
+router.post('/', upload.array('images', 2), createBikeInfo);
 
+// Retrieve bike info by ID
+router.get('/:id', getBikeInfoById);
 
-router.route('/:id').get(getBikeInfoById).put(updateBikeInfo).delete(deleteBikeInfo);
+// Update bike info
+router.put('/:id', updateBikeInfo);
 
+// Delete bike info
+router.delete('/:id', deleteBikeInfo);
 
-
-
-
-module.exports=router;
+module.exports = router;
