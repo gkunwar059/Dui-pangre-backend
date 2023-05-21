@@ -3,65 +3,52 @@ const mongoose = require('mongoose');
 
 const bikeSchema = new mongoose.Schema({
 
-  citizenshipno:
+  citizenshipNo:
  { type: Number,
     required: true },
 
-  phonenumber: 
+  phoneNumber: 
   { type: Number, 
    required: true },
 
-  bikeCC:
+   vehicleName:
    { type: String,
+     required: true },
+
+
+  vehicleCC:
+   { type: Number,
     required: true },
 
-  bikemodel:
+  vehicleModel:
+   { type: Number,
+     required: true },
+
+  vechilePicture:
    { type: String,
      required: true },
 
-  licenceimageId:
+  vehicleDetail:
    { type: String,
      required: true },
 
-  vehicledetail:
+  vechileColor:
    { type: String,
      required: true },
 
-  bikecolor:
-   { type: String,
-     required: true },
-
-  rentprice: 
+  rentPrice: 
   { type: Number,
      required: true },
 
-  bikepic:
+  billbookPic:
    { type: String,
      required: true },
 
-  id:
-   { type: String,
-     required: true },
-
-  userId: 
-  { type: String,
-     required: true },
-
-  vehiclename:
-   { type: String,
-     required: true },
-
+ 
   isreserved:
    { type:Boolean,
      default: false },
 
-  email:
-   { type: String,
-     required: true },
-
-  password:
-   { type: String,
-     required: true },
 
 });
 

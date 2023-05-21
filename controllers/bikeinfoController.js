@@ -2,6 +2,10 @@
 const asyncHandler = require('express-async-handler');
 const BikeInfo= require("../models/bikeinfoModel");
 const bcrypt= require('bcrypt');
+const axios = require('axios');
+const fs = require('fs');
+const FormData = require('form-data');
+const {upload}= require('../middleware/multerConfig');
 
 
 // get all the bike info
@@ -18,65 +22,90 @@ const getbikeinfo= asyncHandler( async(req,res)=>{
 // Create a new bike info
 const createBikeInfo = asyncHandler(async (req, res) => {
   const {
-    citizenshipno,
-    isreserved = false,
-    email,
-    password,
-    userId,
-    id,
-    bikepic,
-    vehicledetail,
-    bikecolor,
-    rentprice,
-    licenceimageId,
-    phonenumber,
-    bikeCC,
-    bikemodel,
-    vehiclename,
+    citizenshipNo,
+    phoneNumber,
+    vehicleName,
+    vehicleCC,
+    vehicleModel,
+    vehicleDetail,
+    vechileColor,
+    rentPrice,
+    isreserved
+
+
   } = req.body;
 
+//upload image logic is there 
+
+const imageUrls = await uploadImages(req.files);
+const vechilePicture = imageUrls[0];
+const billbookPic = imageUrls[1];
+
+
   if (
-    !citizenshipno ||
-    !email ||
-    !password ||
-    !userId ||
-    !id ||
-    !bikepic ||
-    !vehicledetail ||
-    !bikecolor ||
-    !rentprice ||
-    !licenceimageId ||
-    !phonenumber ||
-    !bikeCC ||
-    !bikemodel ||
-    !vehiclename
-  ) {
+   !citizenshipNo ||
+   !phoneNumber ||
+   !vehicleName ||
+   !vehicleCC ||
+   !vehicleModel ||
+   !vechilePicture ||
+   !vehicleDetail ||
+   !vechileColor ||
+   !rentPrice ||
+   !billbookPic ||
+   !isreserved
+
+    ) {
     // return res.status(400).json({ error: 'Missing required fields' });
     res.status(400);
-    throw new Error("All are mandotary ");
+    throw new Error("All are mandatory ");
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);
   const bikeInfo = await BikeInfo. create({
-    citizenshipno,
-    isreserved,
-    email,
-    password:hashedPassword,
-    userId,
-    id,
-    bikepic,
-    vehicledetail,
-    bikecolor,
-    rentprice,
-    licenceimageId,
-    phonenumber,
-    bikeCC,
-    bikemodel,
-    vehiclename,
-  });
+ citizenshipNo,
+ phoneNumber,
+ vehicleName,
+ vehicleCC,
+ vehicleModel,
+ vechilePicture,
+ vehicleDetail,
+ vechileColor,
+ rentPrice,
+ billbookPic,
+ isreserved
 
-//   bikeInfo.save();
+  });
+  //  bikeInfo.save();
   res.status(201).json(bikeInfo);
 });
+
+
+async function uploadImages(images) {
+  const imageUrls = [];
+
+  for (const image of images) {
+    const formData = new FormData();
+    formData.append('image', fs.createReadStream(image.path));
+
+ //   Access the API key using the environment variable
+ const apiKey = process.env. USER_API_KEY;
+
+    const response = await axios.post('https://api.imgbb.com/1/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      params: {
+        key: apiKey, // Replace with your ImgBB API key
+      },
+    });
+
+    imageUrls.push(response.data.data.url);
+  }
+
+  return imageUrls;
+}
+
+
 
 module.exports = {
   createBikeInfo,
