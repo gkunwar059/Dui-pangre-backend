@@ -32,65 +32,77 @@ const getUnsortedBikeInfo = asyncHandler(async (req, res) => {
 
 // Create a new bike info
 const createBikeInfo = asyncHandler(async (req, res) => {
+  // console.log(req);
+  // return ;
   const {
-    citizenshipNo,
-    phoneNumber,
+    id,
+    userId,
     vehicleName,
-    vehicleCC,
-    vehicleModel,
-    vehicleDetail,
-    vechileColor,
-    rentPrice,
-    isreserved
+    citizenshipno,
+    phonenumber,
+    bikeCC,
+    bikemodel,
+    // licenceimageId,
+    vehicledetail,
+    bikecolor,
+    rentprice,
+    // bikepic
+    
 
 
   } = req.body;
+  // console.log(req.body)
 
 //upload image logic is there 
 
 const imageUrls = await uploadImages(req.files);
-const vechilePicture = imageUrls[0];
-const billbookPic = imageUrls[1];
+const  licenceimageId = imageUrls[0];
+const  bikepic = imageUrls[1];
 
 
-  if (
-   !citizenshipNo ||
-   !phoneNumber ||
-   !vehicleName ||
-   !vehicleCC ||
-   !vehicleModel ||
-   !vechilePicture ||
-   !vehicleDetail ||
-   !vechileColor ||
-   !rentPrice ||
-   !billbookPic ||
-   !isreserved
-
-    ) {
-    // return res.status(400).json({ error: 'Missing required fields' });
-    res.status(400);
-    throw new Error("All are mandatory ");
-  }
+if (
+  !id ||
+  !userId||
+  !vehicleName ||
+  !citizenshipno ||
+  !phonenumber ||
+  !bikeCC ||
+  !bikemodel ||
+  !licenceimageId ||
+  !vehicledetail ||
+  !bikecolor ||
+  !rentprice ||
+  !bikepic 
+ )
+ {
+console.log(error);
+   res.status(400).json({ error: 'Missing required fields' });
+   return; // Add this line to exit the function after sending the response
+ }
+ 
   // const hashedPassword = await bcrypt.hash(password, 10);
   const bikeInfo = await BikeInfo. create({
- citizenshipNo,
- phoneNumber,
- vehicleName,
- vehicleCC,
- vehicleModel,
- vechilePicture,
- vehicleDetail,
- vechileColor,
- rentPrice,
- billbookPic,
- isreserved
+    id ,
+    userId,
+    vehicleName ,
+    citizenshipno ,
+    phonenumber ,
+    bikeCC ,
+    bikemodel ,
+    licenceimageId ,
+    vehicledetail ,
+    bikecolor ,
+    rentprice ,
+    bikepic,
 
   });
+
   //  bikeInfo.save();
   res.status(201).json(bikeInfo);
+  // console.log(bikeInfo);
 });
 
-
+// file upload logic is here
 async function uploadImages(images) {
   const imageUrls = [];
 
@@ -115,17 +127,6 @@ async function uploadImages(images) {
 
   return imageUrls;
 }
-
-
-
-module.exports = {
-  createBikeInfo,
-};
-
-
-
-
-
 
 // get bike info by id
 const getBikeInfoById= asyncHandler(async (req,res)=>{

@@ -2,52 +2,65 @@
 const mongoose = require('mongoose');
 
 const bikeSchema = new mongoose.Schema({
+  id:{
+    type: Number,
+    required:true
 
-  citizenshipNo:
+  },
+  userId:{
+    type:Number,
+    required:true
+  },
+  vehicleName:
+  { type: String,
+    required: true },
+
+
+  citizenshipno:
  { type: Number,
     required: true },
 
-  phoneNumber: 
+  phonenumber: 
   { type: Number, 
    required: true },
 
-   vehicleName:
-   { type: String,
-     required: true },
 
-
-  vehicleCC:
+  bikeCC:
    { type: Number,
     required: true },
 
-  vehicleModel:
+  bikemodel:
    { type: Number,
      required: true },
 
-  vechilePicture:
+  licenceimageId:
    { type: String,
      required: true },
 
-  vehicleDetail:
+  vehicledetail:
    { type: String,
      required: true },
 
-  vechileColor:
+  bikecolor:
    { type: String,
      required: true },
 
-  rentPrice: 
+  rentprice: 
   { type: Number,
      required: true },
 
-  billbookPic:
-   { type: String,
-     required: true },
+  // billbookPic:
+  //  { type: String,
+  //    required: true },
 
+     bikepic:
+     { type: String,
+       required: true },
+  
  
-  isreserved:
-   { type:Boolean,
-     default: false },
+  // isreserved:
+  //  { type:Boolean,
+  //    default: false },
 
 
 });
